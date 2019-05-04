@@ -1,13 +1,14 @@
 import matplotlib.pyplot as plt
 
 
-class Rule110:
-    def __init__(self, initial_string):
+class CellularAutomata:
+    def __init__(self, rule, initial_string):
         """
         Initialize class
         :param initial_string: initial string of the form ['0', '1', ... , '0']
         """
-        self.rules = self.get_rules()
+        self.rule = rule
+        self.rules = self.get_rules(self.rule)
         self.output = [initial_string]
         self.length = len(initial_string)
 
@@ -23,20 +24,32 @@ class Rule110:
         self.plot_output(self.output)
 
     @staticmethod
-    def get_rules():
+    def get_rules(rule):
         """
         Gets rules
         :return:
         """
-        rules = {'111': '0',
-                 '110': '1',
-                 '101': '1',
-                 '100': '0',
-                 '011': '1',
-                 '010': '1',
-                 '001': '1',
-                 '000': '0'}
-        return rules
+
+        rules = {'110': {'111': '0',
+                         '110': '1',
+                         '101': '1',
+                         '100': '0',
+                         '011': '1',
+                         '010': '1',
+                         '001': '1',
+                         '000': '0'},
+
+                 '30': {'111': '0',
+                        '110': '0',
+                        '101': '0',
+                        '100': '1',
+                        '011': '1',
+                        '010': '1',
+                        '001': '1',
+                        '000': '0'},
+                 }
+
+        return rules[rule]
 
     def get_next_line(self, previous_line):
         """
@@ -44,9 +57,8 @@ class Rule110:
         :param previous_line:
         :return:
         """
-        i = 0
         next_line = []
-        for string in previous_line:
+        for i in range(len(previous_line)):
             if i == 0:
                 head = '0'+ previous_line[i] + previous_line[i+1]
             elif i == self.length-1:
@@ -55,12 +67,10 @@ class Rule110:
                 head = previous_line[i-1] + previous_line[i] + previous_line[i+1]
 
             next_line.append(self.rules[head])
-            i += 1
 
         return next_line
 
-    @staticmethod
-    def plot_output(output, savefig=True):
+    def plot_output(self, output, savefig=True):
         """
         Plots output matrix as image.
         :param self:
@@ -72,8 +82,7 @@ class Rule110:
         plt.imshow(output)
 
         if savefig:
-            plt.savefig("../output/rule110.png")
-
+            plt.savefig("../output/rule{}.png".format(self.rule))
         plt.show()
 
 
@@ -90,5 +99,5 @@ if __name__ == '__main__':
     # initial_string = ['0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0']
 
     # print(initial_string)
-    rule110 = Rule110(initial_string)
+    rule110 = CellularAutomata(rule='110', initial_string=initial_string)
     rule110.run(steps=100)
