@@ -115,9 +115,10 @@ if __name__ == '__main__':
     # >> > [x + 1 if x >= 45 else x + 5 for x in l]
     keyboard_size = 12
     input = '047'
-    # initial_string = ['1' for note in range(len(keyboard_size))]
+    # initial_string = ['1' for get_note in range(len(keyboard_size))]
     initial_string = ['1', '0', '0', '0', '1', '0', '0', '1', '0', '0', '0', '0', '1', '0', '0', '0', '1', '0', '0', '1', '0', '0', '0', '0']
 
     # print(initial_string)
     rule110 = HarmonicAutomata(initial_string=initial_string, rule='30')
     rule110.run(steps=50)
+    print(rule110.output)
