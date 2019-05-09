@@ -95,7 +95,7 @@ if __name__ == '__main__':
     ones = ['1' for zero in range(n_ones)]
     zeros_trailing = ['0' for zero in range(n_zeros_trailing)]
 
-    initial_string = zeros_leading + ones + zeros_trailing
+    initial_string = zeros_leading + ones + zeros_leading
     # initial_string = ['0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0']
 
     # print(initial_string)

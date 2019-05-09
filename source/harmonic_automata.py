@@ -2,15 +2,17 @@ import matplotlib.pyplot as plt
 
 
 class HarmonicAutomata:
-    def __init__(self, initial_string):
+    def __init__(self, initial_string, rule):
         """
         Initialize class
         :param initial_string: initial string of the form ['0', '1', ... , '0']
         """
-        # self.rule = rule
-        self.rules = self.get_rules()
+        self.rule = rule
+        self.rules = self.get_rules(self.rule)
         self.output = [initial_string]
         self.length = len(initial_string)
+        self.keyboard_size = 12
+        self.repetition = int(self.length/self.keyboard_size)
 
     def run(self, steps):
         """
@@ -24,32 +26,46 @@ class HarmonicAutomata:
         self.plot_output(self.output)
 
     @staticmethod
-    def get_rules():
+    def get_rules(rule):
         """
         Gets rules
         :return:
         """
-        ## TODO: Rewrite this
-        rules = {'110': {'14': '0',
-                         '110': '1',
-                         '101': '1',
-                         '100': '0',
-                         '011': '1',
-                         '010': '1',
-                         '001': '1',
-                         '000': '0'},
+        rules = {
+            '110': {
+                '111': '0',
+                '110': '1',
+                '101': '1',
+                '100': '0',
+                '011': '1',
+                '010': '1',
+                '001': '1',
+                '000': '0'},
 
-                 '30': {'111': '0',
-                        '110': '0',
-                        '101': '0',
-                        '100': '1',
-                        '011': '1',
-                        '010': '1',
-                        '001': '1',
-                        '000': '0'},
-                 }
+            '110neg': {
+                '111': '1',
+                '110': '1',
+                '101': '1',
+                '100': '0',
+                '011': '0',
+                '010': '0',
+                '001': '0',
+                '000': '1'},
 
-        return rules
+            '30': {
+                '111': '0',
+                '110': '0',
+                '101': '0',
+                '100': '1',
+                '011': '1',
+                '010': '1',
+                '001': '1',
+                '000': '0'},
+        }
+
+
+
+        return rules[rule]
 
     def get_next_line(self, previous_line):
         """
@@ -58,17 +74,12 @@ class HarmonicAutomata:
         :return:
         """
         next_line = []
-        for i in range(len(previous_line)):
+        for i in range(12):
             #TODO: Rewrite this!
-            head = '000'
-            # if i == 0:
-            #     head = '0'+ previous_line[i] + previous_line[i+1]
-            # elif i == self.length-1:
-            #     head = previous_line[i-1] + previous_line[i] + '0'
-            # else:
-            #     head = previous_line[i-1] + previous_line[i] + previous_line[i+1]
+            head = previous_line[i] + previous_line[i+4] + previous_line[i+7]
 
             next_line.append(self.rules[head])
+        next_line = next_line*self.repetition
 
         return next_line
 
@@ -84,7 +95,7 @@ class HarmonicAutomata:
         plt.imshow(output)
 
         if savefig:
-            plt.savefig("../output/rule{}.png".format(self.rule))
+            plt.savefig("../output/harmonic/{}.png".format('dur'))
         plt.show()
 
 
@@ -105,8 +116,8 @@ if __name__ == '__main__':
     keyboard_size = 12
     input = '047'
     # initial_string = ['1' for note in range(len(keyboard_size))]
-    initial_string = ['1', '0', '0', '0', '1', '0', '0', '1', '0', '0', '0', '0']
+    initial_string = ['1', '0', '0', '0', '1', '0', '0', '1', '0', '0', '0', '0', '1', '0', '0', '0', '1', '0', '0', '1', '0', '0', '0', '0']
 
     # print(initial_string)
-    rule110 = HarmonicAutomata(initial_string=initial_string)
-    rule110.run(steps=10)
+    rule110 = HarmonicAutomata(initial_string=initial_string, rule='30')
+    rule110.run(steps=50)
